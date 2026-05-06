@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mateo Medak | Digital Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+/* ========== RESET ========== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+/* ========== VARIABLES ========== */
+:root {
+  --accent1: #5eead4;
+  --accent2: #38bdf8;
+  --accent3: #a78bfa;
+  --bg: #020617;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --card: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.15);
+}
+
+/* ========== BODY ========== */
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ========== ANIMATED GRADIENT WAVES ========== */
+.wave {
+  position: fixed;
+  inset: -50%;
+  background: radial-gradient(circle at 30% 30%, var(--accent1), transparent 40%),
+              radial-gradient(circle at 70% 40%, var(--accent2), transparent 45%),
+              radial-gradient(circle at 50% 70%, var(--accent3), transparent 50%);
+  animation: swirl 40s linear infinite;
+  opacity: 0.15;
+  z-index: -4;
+}
+
+@keyframes swirl {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ========== STARFIELD ========== */
+canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+}
+
+/* ========== NOISE TEXTURE ========== */
+.noise {
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: -2;
+}
+
+/* ========== MOUSE GLOW ========== */
+.glow {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--accent1), transparent 70%);
+  filter: blur(80px);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: -1;
+  transition: transform 0.05s linear;
+}
+
+/* ========== NAV ========== */
+nav {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  padding: 1rem 8%;
+  display: flex;
+  justify-content: space-between;
+  backdrop-filter: blur(16px);
+  background: rgba(2,6,23,0.7);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+}
+
+nav h1 { font-weight: 800; }
+nav a {
+  color: var(--muted);
+  margin-left: 1.5rem;
+  text-decoration: none;
+  position: relative;
+}
+nav a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: -6px;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  transition: 0.3s;
+}
+nav a:hover::after { width: 100%; }
+
+/* ========== HERO ========== */
+header {
+  min-height: 100vh;
+  padding: 0 8%;
+  display: flex;
+  align-items: center;
+}
+
+.hero h2 {
+  font-size: 3.8rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.hero span {
+  background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  margin: 1.5rem 0 2.5rem;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+/* ========== BUTTON ========== */
+.hero a {
+  padding: 0.9rem 2rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  color: #020617;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 0 60px rgba(94,234,212,0.6);
+}
+
+/* ========== SECTIONS ========== */
+section {
+  padding: 7rem 8%;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  backdrop-filter: blur(16px);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 40px 90px rgba(0,0,0,0.6);
+}
+
+/* ========== GRIDS ========== */
+.skills, .projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+}
+
+/* ========== REVEAL ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: 1s cubic-bezier(.2,.8,.2,1);
+}
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== FOOTER ========== */
+footer {
+  text-align: center;
+  padding: 3rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .hero h2 { font-size: 2.6rem; }
+  section { padding: 6rem 5%; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wave"></div>
+<div class="noise"></div>
+<div class="glow" id="glow"></div>
+<canvas id="stars"></canvas>
+
+<nav>
+  <h1>Mateo Medak</h1>
+  <div>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<header>
+  <div class="hero reveal">
+    <h2>
+      Hi, I’m <span>Mateo</span>.<br>
+      A hardworking student<br>
+      building a <span>future</span>.
+    </h2>
+    <p>Built for college today — designed for the world tomorrow.</p>
+    <a href="#projects">Explore</a>
+  </div>
+</header>
+
+<section id="about">
+  <div class="card reveal">I’m a motivated student who loves learning, experimenting, and improving every day.</div>
+</section>
+
+<section id="skills">
+  <div class="skills">
+    <div class="card reveal">HTML & CSS</div>
+    <div class="card reveal">JavaScript</div>
+    <div class="card reveal">Git & GitHub</div>
+    <div class="card reveal">Problem Solving</div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="projects">
+    <div class="card reveal">
+      <h3>Digital Portfolio</h3>
+      <p>Animated, modern portfolio website.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2025 Mateo Medak
+</footer>
+
+<script>
+/* ===== STARFIELD ===== */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let stars = Array.from({ length: 120 }, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  r: Math.random() * 1.5 + 0.5,
+  s: Math.random() * 0.5 + 0.2
+}));
+
+function animateStars() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  stars.forEach(star => {
+    star.y += star.s;
+    if (star.y > canvas.height) star.y = 0;
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+  });
+  requestAnimationFrame(animateStars);
+}
+animateStars();
+
+/* ===== MOUSE GLOW ===== */
+const glow = document.getElementById("glow");
+window.addEventListener("mousemove", e => {
+  glow.style.transform = `translate(${e.clientX - 150}px, ${e.clientY - 150}px)`;
+});
+
+/* ===== REVEAL ===== */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => e.isIntersecting && e.target.classList.add("show"));
+}, { threshold: 0.15 });
+
+document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
